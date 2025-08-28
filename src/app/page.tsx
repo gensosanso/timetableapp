@@ -67,21 +67,23 @@ export default function Home() {
       id: "6",
       subject: "Éducation Physique",
       teacher: "M. Leroy",
-      class: "CP-A",
+      className: "CP-A",
       day: "monday",
       startTime: "08:00",
       duration: 100,
       color: "#06b6d4",
+      isScheduled: true,
     },
     {
       id: "7",
       subject: "Arts Plastiques",
       teacher: "Mme Moreau",
-      class: "CP-A",
+      className: "CP-A",
       day: "tuesday",
       startTime: "13:10",
       duration: 50,
       color: "#ec4899",
+      isScheduled: true,
     },
   ];
 
@@ -132,20 +134,16 @@ export default function Home() {
         <div className="flex-1">
           <Card className="h-full bg-white p-4">
             <WeeklyCalendarGrid
-              viewType={viewType}
-              selectedEntity={selectedEntity}
-              scheduledCourses={scheduledCourses}
+              view={viewType}
+              selectedFilter={selectedEntity}
+              courses={scheduledCourses}
             />
           </Card>
         </div>
 
         {/* Sidebar */}
         <div className="w-80">
-          <CourseSidebar
-            courses={unscheduledCourses}
-            viewType={viewType}
-            selectedEntity={selectedEntity}
-          />
+          <CourseSidebar />
         </div>
       </div>
 

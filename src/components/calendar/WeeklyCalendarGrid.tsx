@@ -94,7 +94,7 @@ const WeeklyCalendarGrid = ({
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-  const hours = [];
+  const hours: string[] = [];
 
   // Generate teaching periods of 50 minutes from 8:00 to 15:00
   const periods = [
