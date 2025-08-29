@@ -62,7 +62,7 @@ export default function Home() {
   ];
 
   // Mock data for scheduled courses
-  const scheduledCourses = [
+  const [scheduledCourses, setScheduledCourses] = useState([
     {
       id: "6",
       subject: "Éducation Physique",
@@ -85,7 +85,7 @@ export default function Home() {
       color: "#ec4899",
       isScheduled: true,
     },
-  ];
+  ]);
 
   // Handle view change
   const handleViewChange = (
@@ -104,6 +104,12 @@ export default function Home() {
   // Handle entity change
   const handleEntityChange = (entityId: string) => {
     setSelectedEntity(entityId);
+  };
+
+  // Handle course unassign
+  const handleCourseUnassign = (courseId: string) => {
+    // Remove the course from scheduled courses
+    setScheduledCourses((prev: any[]) => prev.filter((course: any) => course.id !== courseId));
   };
 
   return (
@@ -137,6 +143,7 @@ export default function Home() {
               view={viewType}
               selectedFilter={selectedEntity}
               courses={scheduledCourses}
+              onCourseUnassign={handleCourseUnassign}
             />
           </Card>
         </div>

@@ -55,6 +55,7 @@ interface WeeklyCalendarGridProps {
     subject: Subject,
     teacher: Teacher,
   ) => void;
+  onCourseUnassign?: (courseId: string) => void;
   view?: "class" | "teacher" | "school";
   selectedFilter?: string;
 }
@@ -82,6 +83,7 @@ const WeeklyCalendarGrid = ({
   onCourseDrop = () => {},
   onCourseResize = () => {},
   onCourseAssign = () => {},
+  onCourseUnassign = () => {},
   view = "class",
   selectedFilter = "",
 }: WeeklyCalendarGridProps) => {
@@ -289,7 +291,11 @@ const WeeklyCalendarGrid = ({
                           height: `${(scheduledCourse.duration / 50) * 80}px`,
                         }}
                       >
-                        <CourseCard {...scheduledCourse} isPlaced={true} />
+                        <CourseCard 
+                          {...scheduledCourse} 
+                          isPlaced={true} 
+                          onUnassign={onCourseUnassign}
+                        />
                       </div>
                     )}
 

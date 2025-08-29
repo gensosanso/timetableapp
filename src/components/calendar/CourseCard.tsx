@@ -3,7 +3,7 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { GripVertical, Clock, AlertCircle } from "lucide-react";
+import { GripVertical, AlertCircle, X } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -21,6 +21,7 @@ interface CourseCardProps {
   isDragging?: boolean;
   hasConflict?: boolean;
   isPlaced?: boolean;
+  onUnassign?: (courseId: string) => void;
 }
 
 const CourseCard = ({
@@ -33,16 +34,13 @@ const CourseCard = ({
   isDragging = false,
   hasConflict = false,
   isPlaced = false,
+  onUnassign,
 }: CourseCardProps) => {
-  // Convert duration to periods format (e.g., "1 période" or "2 périodes")
-  const periods = Math.round(duration / 50);
-  const formattedDuration = periods === 1 ? "1 période" : `${periods} périodes`;
-  const detailedDuration = `${duration} min`;
 
   return (
     <Card
       className={cn(
-        "relative flex flex-col p-3 cursor-grab active:cursor-grabbing transition-all bg-white",
+        "relative flex flex-col p-3 cursor-grab active:cursor-grabbing transition-all bg-white group",
         isDragging && "shadow-lg opacity-75 scale-105",
         hasConflict && "ring-2 ring-red-500",
         isPlaced ? "w-full h-full" : "w-[200px] h-[100px]",
@@ -58,39 +56,43 @@ const CourseCard = ({
         <GripVertical size={16} className="cursor-grab" />
       </div>
 
-      {/* Course content */}
+      {/* Unassign button for placed courses */}
+      {isPlaced && onUnassign && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => onUnassign(id || "")}
+                className="absolute top-2 left-2 p-1 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                title="Annuler l'assignation"
+              >
+                <X size={12} />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Annuler l'assignation</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+
+      {/* Course content - Empty for clean display */}
       <div className="flex flex-col h-full justify-between">
-        <div>
-          <h3 className="font-medium text-sm truncate">{subject}</h3>
-          <p className="text-xs text-gray-600 truncate">{teacher}</p>
-          <p className="text-xs text-gray-500 truncate">{className}</p>
-        </div>
-
-        <div className="flex items-center justify-between mt-2">
-          <div className="flex flex-col text-xs text-gray-500">
-            <div className="flex items-center">
-              <Clock size={12} className="mr-1" />
-              {formattedDuration}
-            </div>
-            <div className="text-gray-400">{detailedDuration}</div>
-          </div>
-
-          {/* Conflict indicator */}
-          {hasConflict && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="text-red-500">
-                    <AlertCircle size={16} />
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Conflit détecté</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-        </div>
+        {/* Conflict indicator */}
+        {hasConflict && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="text-red-500">
+                  <AlertCircle size={16} />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Conflit détecté</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
 
       {/* Resize handle for placed courses */}
